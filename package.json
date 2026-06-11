@@ -1,0 +1,21 @@
+{
+  "name": "moonshot",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "test": "node tests/orbits.test.mjs",
+    "mission": "node tests/mission.test.mjs",
+    "smoke": "node scripts/smoke.mjs"
+  },
+  "dependencies": {
+    "three": "^0.180.0"
+  },
+  "devDependencies": {
+    "playwright": "^1.60.0",
+    "vite": "^6.0.0"
+  }
+}

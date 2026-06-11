@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MOONSHOT — a tiny space program</title>
+  <link rel="icon" href="data:," />
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <div id="app">
+    <!-- ===================== VAB ===================== -->
+    <div id="vab" class="screen hidden">
+      <div id="vab-top" class="panel">
+        <span class="logo">MOONSHOT<span class="sub">VEHICLE ASSEMBLY</span></span>
+        <input id="craft-name" value="Untitled Craft" spellcheck="false" />
+        <button id="btn-save">Save</button>
+        <select id="load-select"><option value="">Load craft…</option></select>
+        <button id="btn-clear">Clear</button>
+        <span class="spacer"></span>
+        <button id="btn-stock-hopper" class="ghost">Stock: Suborbital Hopper</button>
+        <button id="btn-stock-mun" class="ghost">Stock: Mun Express</button>
+        <button id="btn-launch" class="launch">LAUNCH ▶</button>
+      </div>
+      <div id="vab-left" class="panel">
+        <div id="palette-tabs"></div>
+        <div id="palette"></div>
+        <div id="part-info" class="dim">Hover a part for stats. Click to add to the stack (inserted below the selected part).</div>
+      </div>
+      <div id="vab-right" class="panel">
+        <h3>STACK <span class="dim">(top → bottom)</span></h3>
+        <div id="stack-list"></div>
+        <div id="radial-tools">
+          <h3>RADIAL ATTACH</h3>
+          <div class="row">
+            <select id="radial-part"></select>
+            <select id="radial-sym">
+              <option value="2">×2</option><option value="3">×3</option>
+              <option value="4" selected>×4</option><option value="6">×6</option>
+            </select>
+            <button id="btn-radial-add">Add</button>
+          </div>
+          <div class="dim">Attaches to the selected stack part. Boosters &amp; drop tanks get radial decouplers automatically.</div>
+        </div>
+        <h3>STAGING &amp; Δv <span class="dim">(vacuum)</span></h3>
+        <div id="stage-stats"></div>
+        <div id="craft-stats"></div>
+      </div>
+    </div>
+
+    <!-- ===================== FLIGHT ===================== -->
+    <div id="flight-ui" class="screen hidden">
+      <div id="topbar" class="panel">
+        <span class="logo">MOONSHOT</span>
+        <span id="met">T+ 00:00:00</span>
+        <span id="situation">PRELAUNCH — KERBIN</span>
+        <span class="spacer"></span>
+        <span id="warp-display">WARP 1×</span>
+        <button id="btn-warp-down">◀</button>
+        <button id="btn-warp-up">▶</button>
+        <button id="btn-map">Map [M]</button>
+        <button id="btn-help">Keys [H]</button>
+        <button id="btn-revert" class="danger">Revert to VAB</button>
+      </div>
+
+      <div id="stage-panel" class="panel">
+        <h3>STAGES</h3>
+        <div id="stage-list"></div>
+        <div id="resource-bars"></div>
+      </div>
+
+      <div id="orbit-panel" class="panel">
+        <h3 id="orbit-title">ORBIT — KERBIN</h3>
+        <div id="orbit-data"></div>
+      </div>
+
+      <div id="bottom-cluster">
+        <div id="left-readouts" class="panel">
+          <div class="big" id="ro-alt">ALT 0 m</div>
+          <div id="ro-agl">AGL 0 m</div>
+          <div id="ro-vspeed">VSPD 0.0 m/s</div>
+          <div id="ro-accel">ACC 0.0 g</div>
+        </div>
+        <div id="navball-slot"></div>
+        <div id="right-readouts" class="panel">
+          <div class="big" id="ro-speed">SRF 0 m/s</div>
+          <div id="ro-mode">surface velocity</div>
+          <div id="ro-mass">MASS 0 t</div>
+          <div id="ro-temp">TEMP OK</div>
+        </div>
+      </div>
+
+      <div id="throttle-wrap" class="panel">
+        <div class="dim">THR</div>
+        <div id="throttle-track"><div id="throttle-fill"></div></div>
+        <div id="sas-ind" class="on">SAS</div>
+        <div id="sas-mode-ind">HOLD</div>
+      </div>
+
+      <div id="msglog"></div>
+      <div id="banner" class="hidden"></div>
+
+      <div id="endcard" class="panel hidden">
+        <h2 id="endcard-title">CRASHED</h2>
+        <p id="endcard-text"></p>
+        <button id="btn-end-revert">Revert to VAB</button>
+        <button id="btn-end-relaunch">Relaunch same craft</button>
+      </div>
+
+      <div id="help" class="panel hidden">
+        <h3>FLIGHT CONTROLS</h3>
+        <table>
+          <tr><td>Shift / Ctrl</td><td>throttle up / down</td></tr>
+          <tr><td>Z / X</td><td>full throttle / cut</td></tr>
+          <tr><td>Space</td><td>activate next stage</td></tr>
+          <tr><td>W / S</td><td>pitch</td></tr>
+          <tr><td>A / D</td><td>yaw</td></tr>
+          <tr><td>Q / E</td><td>roll</td></tr>
+          <tr><td>T</td><td>toggle SAS</td></tr>
+          <tr><td>1 / 2 / 3</td><td>SAS: hold / prograde / retrograde</td></tr>
+          <tr><td>G</td><td>toggle landing legs</td></tr>
+          <tr><td>P</td><td>arm / deploy parachutes</td></tr>
+          <tr><td>, / .</td><td>time warp down / up</td></tr>
+          <tr><td>M</td><td>map view</td></tr>
+          <tr><td>Mouse drag / wheel</td><td>camera</td></tr>
+        </table>
+        <div class="dim">Rails warp (&gt;4×) needs engines off and to be out of the atmosphere.</div>
+        <button id="btn-help-close">Close</button>
+      </div>
+    </div>
+  </div>
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>
